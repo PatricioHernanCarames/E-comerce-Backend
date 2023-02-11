@@ -1,0 +1,29 @@
+"products"  [
+    {
+      "id": 1,
+      "title":"Laptop",
+      "description": "Laptop computer",
+      "price": 1000,
+      "thumbnail": "this.jpg",
+      "stock": "100",
+      "code": 236,
+    },
+    {
+      "id": 2,
+      "title": "Gamer PC",
+      "description": "Desktop computer",
+      "price": 10000,
+      "thumbnail": "this.jpg",
+      "stock": "100",
+      "code": 237,
+    },
+    {
+      "id": 3,
+      "title": "Gamer headset",
+      "description": "Accesories",
+      "price": 70,
+      "thumbnail": "this.jpg",
+      "stock": "100",
+      "code": 238,
+    }
+  ]

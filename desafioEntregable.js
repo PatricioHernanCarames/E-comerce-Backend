@@ -1,72 +1,106 @@
+const fs = require("fs");
+
 class ProductManager {
-    nextId = 0;
-    products = [];
-  
-    addProduct(title, description, price, thumbnail, stock, code) {
+  #path = "./products.json";
+  #nextId = 0;
+  #products = [];
 
-        let codeExists = this.products.some((p) => p.code === code);
-  
-      if (!codeExists) {
-        
-        const newProduct = {
-            id: this.nextId,
-            title,
-            description,
-            price,
-            thumbnail,
-            stock,
-            code,
-          };
-      
-          this.products = [...this.products, newProduct];
-      
-          
-      
-          this.nextId++;
-          
-        
-      } else {
-        console.log(`El producto con código ${code} ya existe`);
-      }
+  constructor(path) {
+    this.#path = path;
+  }
 
+  async addProduct(title, description, price, thumbnail, stock, code) {
+    let codeExists = (await this.getProducts()).some((p) => p.code === code);
 
+    if (!codeExists) {
+      const newProduct = {
+        id: this.#nextId,
+        title,
+        description,
+        price,
+        thumbnail,
+        stock,
+        code,
+      };
 
-      
-    }
-  
-    getProducts() {
-      return this.products;
-    }
-  
-    getProductById(id) {
-      let idIsPresent = this.products.find(function (product) {
-        return product.id === id;
-      });
-  
-      if (idIsPresent) {
-        return idIsPresent;
-      } else {
-        console.log("Product not found");
-      }
+      this.#products = [...(await this.getProducts()), newProduct];
+      this.#nextId++;
+
+      await fs.promises.writeFile(this.#path, JSON.stringify(this.#products));
+    } else {
+      console.log(`El producto con código ${code} ya existe`);
     }
   }
-  
-  const manager = new ProductManager();
-  
-  console.log(manager);
-  
-  manager.addProduct("Laptop", "Laptop computer", 1000, "this.jpg", "100", 236);
-  manager.addProduct("Gamer PC", "Desktop computer", 10000, "this.jpg", "100", 237);
-  manager.addProduct("Gamer headset", "Accesories", 70, "this.jpg", "100", 238);
 
-  console.log(manager);
+  async getProducts() {
+    try {
+      const products = await fs.promises.readFile(this.#path);
+      return JSON.parse(products);
+    } catch (error) {
+      return [];
+    }
+  }
 
- 
+  async getProductById(id) {
+    let idIsPresent = (await this.getProducts()).find(function (product) {
+      return product.id === id;
+    });
+
+    if (idIsPresent) {
+      return idIsPresent;
+    } else {
+      console.log("Product not found");
+    }
+  }
+
+  async updateProducts(id, name, price) {
+    let products = await this.getProducts();
+    let product = products.find((p) => p.id == id);
+    product.title = name;
+    product.price = price;
+    await fs.promises.writeFile(this.#path, JSON.stringify(products));
+  }
+
+  async deleteProduct(productId) {
+    let products = await this.getProducts();
+    let product = products.find((p) => p.id === productId);
+    let index = products.indexOf(product);
+
+    if (index !== -1) {
+      products.splice(index, 1);
+      await this.saveProducts();
+    } else {
+      console.log(`Producto con id ${productId} no encontrado`);
+    }
+  }
+
+  async saveProducts() {
+    
+    try{
+    await fs.promises.writeFile(this.#path, JSON.stringify(this.#products));
+    } catch(e) {
+      console.log(`Error gusrdando los archivos en  ${this.#path}`);
+
+  }
+}
+} 
+  
+
+
+const manager = new ProductManager();
+
+console.log(manager);
+
+manager.addProduct("Laptop", "Laptop computer", 1000, "this.jpg", "100", 236);
+manager.addProduct(  "Gamer PC",  "Desktop computer",  10000,  "this.jpg",  "100",  237);
+manager.addProduct("Gamer headset", "Accesories", 70, "this.jpg", "100", 238);
+
+console.log(manager);
+
 let prod = manager.getProductById(0);
- console.log(prod);
+console.log(prod);
 
- manager.addProduct("Desktop switch", "ethernet", 20, "this.jpg", "100", 238);  
-  
+manager.addProduct("Desktop switch", "ethernet", 20, "this.jpg", "100", 238);
 
 let prods = manager.getProducts();
- console.log(prods);
+console.log(prods);
