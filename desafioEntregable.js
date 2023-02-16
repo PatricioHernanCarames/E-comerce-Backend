@@ -7,7 +7,13 @@ class ProductManager {
 
   constructor(path) {
     this.#path = path;
+    this.getProducts().then((products) => {
+      this.#products = products;
+      this.#nextId = products.length;
+    });
   }
+
+  
 
   async addProduct(title, description, price, thumbnail, stock, code) {
     let codeExists = (await this.getProducts()).some((p) => p.code === code);
@@ -26,7 +32,7 @@ class ProductManager {
       this.#products = [...(await this.getProducts()), newProduct];
       this.#nextId++;
 
-      await fs.promises.writeFile(this.#path, JSON.stringify(this.#products));
+      //await fs.promises.writeFile(this.#path, JSON.stringify(this.#products));
     } else {
       console.log(`El producto con código ${code} ya existe`);
     }
@@ -56,9 +62,14 @@ class ProductManager {
   async updateProducts(id, name, price) {
     let products = await this.getProducts();
     let product = products.find((p) => p.id == id);
-    product.title = name;
-    product.price = price;
-    await fs.promises.writeFile(this.#path, JSON.stringify(products));
+
+    if (product) {
+      product.title = name;
+      product.price = price;
+      await fs.promises.writeFile(this.#path, JSON.stringify(products));
+    } else {
+      console.log(`Producto con id ${id} no encontrado`);
+    }
   }
 
   async deleteProduct(productId) {
@@ -68,7 +79,7 @@ class ProductManager {
 
     if (index !== -1) {
       products.splice(index, 1);
-      await this.saveProducts();
+      await fs.promises.writeFile(this.#path, JSON.stringify(products));
     } else {
       console.log(`Producto con id ${productId} no encontrado`);
     }
@@ -84,10 +95,11 @@ class ProductManager {
   }
 }
 } 
+
   
 
 
-const manager = new ProductManager();
+const manager = new ProductManager("./products.json");
 
 console.log(manager);
 
@@ -104,3 +116,9 @@ manager.addProduct("Desktop switch", "ethernet", 20, "this.jpg", "100", 238);
 
 let prods = manager.getProducts();
 console.log(prods);
+
+manager.saveProducts()
+
+
+
+
