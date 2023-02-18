@@ -32,7 +32,7 @@ class ProductManager {
       this.#products = [...(await this.getProducts()), newProduct];
       this.#nextId++;
 
-      //await fs.promises.writeFile(this.#path, JSON.stringify(this.#products));
+      
     } else {
       console.log(`El producto con código ${code} ya existe`);
     }
