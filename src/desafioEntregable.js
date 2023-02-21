@@ -1,7 +1,7 @@
-const fs = require("fs");
+import fs from "fs";
 
 class ProductManager {
-  #path = "./products.json";
+  #path = "./src/products.json";
   #nextId = 0;
   #products = [];
 
@@ -12,8 +12,6 @@ class ProductManager {
       this.#nextId = products.length;
     });
   }
-
-  
 
   async addProduct(title, description, price, thumbnail, stock, code) {
     let codeExists = (await this.getProducts()).some((p) => p.code === code);
@@ -31,8 +29,6 @@ class ProductManager {
 
       this.#products = [...(await this.getProducts()), newProduct];
       this.#nextId++;
-
-      
     } else {
       console.log(`El producto con código ${code} ya existe`);
     }
@@ -86,39 +82,12 @@ class ProductManager {
   }
 
   async saveProducts() {
-    
-    try{
-    await fs.promises.writeFile(this.#path, JSON.stringify(this.#products));
-    } catch(e) {
+    try {
+      await fs.promises.writeFile(this.#path, JSON.stringify(this.#products));
+    } catch (e) {
       console.log(`Error gusrdando los archivos en  ${this.#path}`);
-
+    }
   }
 }
-} 
 
-  
-
-
-const manager = new ProductManager("./products.json");
-
-console.log(manager);
-
-manager.addProduct("Laptop", "Laptop computer", 1000, "this.jpg", "100", 236);
-manager.addProduct(  "Gamer PC",  "Desktop computer",  10000,  "this.jpg",  "100",  237);
-manager.addProduct("Gamer headset", "Accesories", 70, "this.jpg", "100", 238);
-
-console.log(manager);
-
-let prod = manager.getProductById(0);
-console.log(prod);
-
-manager.addProduct("Desktop switch", "ethernet", 20, "this.jpg", "100", 238);
-
-let prods = manager.getProducts();
-console.log(prods);
-
-manager.saveProducts()
-
-
-
-
+export default ProductManager;
