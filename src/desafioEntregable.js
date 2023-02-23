@@ -1,7 +1,7 @@
 import fs from "fs";
 
 class ProductManager {
-  #path = "./src/products.json";
+  #path = "./products.json";
   #nextId = 0;
   #products = [];
 
@@ -85,7 +85,7 @@ class ProductManager {
     try {
       await fs.promises.writeFile(this.#path, JSON.stringify(this.#products));
     } catch (e) {
-      console.log(`Error gusrdando los archivos en  ${this.#path}`);
+      console.log(`Error guardando los archivos en  ${this.#path}`);
     }
   }
 }

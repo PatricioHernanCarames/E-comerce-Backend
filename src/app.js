@@ -1,5 +1,5 @@
 import express from "express";
-import ProductManager from "./src/desafioEntregable.js";
+import ProductManager from "./desafioEntregable.js";
 
 const manager = new ProductManager();
 const app = express();
@@ -9,24 +9,25 @@ app.get("/wellcome", (req, res) => {
 });
 
 app.get("/products", async (req, res) => {
-  const limit = parseInt(req.query.limit) || undefined;
-  const products = await ProductManager.getProducts(limit);
-  res.send(products);
+  const limit = parseInt(req.query.limit);
+  const products = await manager.getProducts();
+  
+  if(limit){
+    return products.slice(0, limit)
+  }else{
+    return products;
+  }
+  
+  
 });
 
 app.get("/products/:pid", async (req, res) => {
-  const products = await manager.getProductById();
-  const id = req.params.id;
+  const id = req.params.pid;
+  const products = await manager.getProductById(id);
+    
+  res.send(products);
 
-  const idIsPresent = products.find(function (product) {
-    product.id === id;
-  });
-
-  if (idIsPresent) {
-    res.send(idIsPresent);
-  } else {
-    res.status(404).send("Product not found");
-  }
+  
 });
 app.listen(8080, () => {
   console.log("Servidor corriendo en http://localhost:8080/");
