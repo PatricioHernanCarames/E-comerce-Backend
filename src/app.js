@@ -1,3 +1,32 @@
+
+import express from "express";
+import router from "./routes/cart.router.js";
+import __dirname from "./utils.js";
+
+
+const app = express();
+
+app.use(express.static(__dirname + "/../public"));
+
+app.use("/api/users", router);
+
+
+app.listen(8080, () => {
+  console.log("Server listening on port 8080");
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*import express from "express";
 import ProductManager from "./desafioEntregable.js";
 import router from "./routes/cart.router.js";
@@ -76,20 +105,4 @@ app.post('/cart', (req, res) => {
 app.listen(8080, () => {
   console.log("Servidor corriendo en http://localhost:8080/");
 });*/
-
-import express from "express";
-import router from "./routes/cart.router.js";
-import __dirname from "./utils.js";
-
-
-const app = express();
-
-app.use(express.static(__dirname + "/../public"));
-
-app.use("/api/users", router);
-
-
-app.listen(8080, () => {
-  console.log("Server listening on port 8080");
-});
 
