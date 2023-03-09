@@ -1,14 +1,23 @@
-
 import express from "express";
 import router from "./routes/cart.router.js";
-import __dirname from "./utils.js";
+import prodRouter from "./routes/products.router.js";
+import __dirname from "./routes/utils.js";
+import path from "path"
+import { fileURLToPath } from "url";
+
+
 
 
 const app = express();
 
-app.use(express.static(__dirname + "/../public"));
+
+app.use(express.json());
 
 app.use("/api/users", router);
+app.use("/api/products", prodRouter);
+
+
+app.use(express.static(__dirname + "/../public"));
 
 
 app.listen(8080, () => {
