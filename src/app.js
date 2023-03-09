@@ -1,27 +1,46 @@
 import express from "express";
 import router from "./routes/cart.router.js";
 import prodRouter from "./routes/products.router.js";
-import __dirname from "./routes/utils.js";
-import path from "path"
-import { fileURLToPath } from "url";
+import __dirname from "./utils.js";
+import viewRouter from "./routes/views.router.js";
+import { Server } from "socket.io";
+import { engine } from "express-handlebars";
 
 
 
 
 const app = express();
 
+const products = ProductManager.getProducts();
+
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", __dirname + "/views");
 
 app.use(express.json());
 
 app.use("/api/users", router);
 app.use("/api/products", prodRouter);
+app.use("/", viewRouter)
 
 
 app.use(express.static(__dirname + "/../public"));
 
 
-app.listen(8080, () => {
+const httpServer = app.listen(8080, () => {
   console.log("Server listening on port 8080");
+});
+
+const io = new  Server(httpServer);
+
+socket.on("connection", (socket)=>{
+  socket.emit("text", (data)=>{
+    products.forEach(element => {
+      return element;
+      
+    });
+  });
+
 });
 
 

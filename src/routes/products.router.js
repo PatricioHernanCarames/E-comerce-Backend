@@ -3,15 +3,16 @@ import path from "path";
 import express from  "express"
 const prodRouter = express.Router();
 
-// Endpoint para obtener todos los productos
+
 prodRouter.get('/', (req, res) => {
-  const productsPath = path.join(__dirname, 'products.json');
+  const productsPath = path.join(__dirname,'..','data', 'products.json');
   fs.readFile(productsPath, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       res.status(500).send('Error al obtener los productos');
     } else {
       const products = JSON.parse(data);
+      
       res.json(products);
     }
   });
@@ -24,6 +25,8 @@ prodRouter.get('/:id', (req, res) => {
   const product = { id: productId, name: `Producto ${productId}` };
   res.json(product);
 });
+
+
 
 
 prodRouter.post('/', (req, res) => {

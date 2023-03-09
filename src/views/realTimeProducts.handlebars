@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Productos</title>
+  </head>
+  <body>
+    <h1>Productos</h1>
+    <ul>
+      {{#each products}}
+        <li>
+          <h2>{{name}}</h2>
+          <p>{{description}}</p>
+          <p>Precio: {{price}}</p>
+        </li>
+      {{/each}}
+    </ul>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/public/index.js"></script>
+  </body>
+</html>
