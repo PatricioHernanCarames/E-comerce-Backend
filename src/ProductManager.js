@@ -1,7 +1,8 @@
 import fs from "fs";
+import __dirname from "./utils.js";
 
 class ProductManager {
-  #path = "./products.json";
+  #path = __dirname +"/src/api/products.json";
   #nextId = 0;
   #products = [];
 
@@ -13,35 +14,42 @@ class ProductManager {
     });
   }
 
-  async addProduct(title, description, price, thumbnail, stock, code) {
+  async addProduct(productData) {
+    const { name, description, price, quantity, thumbnail, code  } = productData;
+    
+    
     let codeExists = (await this.getProducts()).some((p) => p.code === code);
 
     if (!codeExists) {
       const newProduct = {
         id: this.#nextId,
-        title,
+        name,
         description,
         price,
+        quantity,
         thumbnail,
-        stock,
-        code,
+        code
       };
 
       this.#products = [...(await this.getProducts()), newProduct];
       this.#nextId++;
+      
     } else {
       console.log(`El producto con código ${code} ya existe`);
     }
   }
+
+  
 
   async getProducts() {
     try {
       const products = await fs.promises.readFile(this.#path);
       return JSON.parse(products);
     } catch (error) {
-      return [];
+      return Promise.reject(error); 
     }
   }
+  
 
   async getProductById(id) {
     let idIsPresent = (await this.getProducts()).find(function (product) {

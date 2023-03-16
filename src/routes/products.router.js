@@ -1,67 +1,27 @@
-import fs from "fs";
-import path from "path";
-import express from  "express"
-const prodRouter = express.Router();
+import { Router, json } from "express";
+import ProductManager from "../ProductManager.js";
 
 
-prodRouter.get('/', (req, res) => {
-  const productsPath = path.join(__dirname,'..','data', 'products.json');
-  fs.readFile(productsPath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error al obtener los productos');
-    } else {
-      const products = JSON.parse(data);
-      
-      res.json(products);
-    }
-  });
-});
-
-
-prodRouter.get('/:id', (req, res) => {
-  
-  const productId = req.params.id;
-  const product = { id: productId, name: `Producto ${productId}` };
-  res.json(product);
-});
+let manager = new ProductManager("./src/api/products.json");
 
 
 
+const productsRouter = Router();
 
-prodRouter.post('/', (req, res) => {
-  
-  const product = req.body;
-  
-  if (!product || !product.name) {
-    res.status(400).json({ error: 'El nombre del producto es obligatorio' });
-  } else {
+productsRouter.use(json()); 
+
+
+
+productsRouter.get('/:prod', async (req, res) => {
+
+    const products =await manager.getProducts();
+
     
-    product.id = Math.floor(Math.random() * 1000) + 1;
-    res.status(201).json(product);
-  }
-});
 
-prodRouter.put('/:id', (req, res) => {
-  
-  const productId = req.params.id;
-  const product = req.body;
-  
-  if (!product || !product.name) {
-    res.status(400).json({ error: 'El nombre del producto es obligatorio' });
-  } else {
+    res.render("realTimeProducts", {products});
+
     
-    product.id = productId;
-    res.json(product);
-  }
+
 });
 
-
-prodRouter.delete('/:id', (req, res) => {
-  
-  const productId = req.params.id;
-  
-  res.sendStatus(204);
-});
-
-export default prodRouter;
+export default productsRouter;
