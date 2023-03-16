@@ -1,4 +1,4 @@
-import ProductManager from "../ProductManager";
+import ProductManager from "../api/ProductManager";
 const socket = io();
 
 socket.emit("message", "Mensaje desde frontend!");
@@ -28,4 +28,5 @@ newProduct.addEventListener("click", () => {
 
   const productData = { name, description, price, quantity, thumbnail, code };
   ProductManager.addProduct(productData);
+  ProductManager.saveProducts();
 });

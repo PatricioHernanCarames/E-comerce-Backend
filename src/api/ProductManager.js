@@ -1,8 +1,8 @@
 import fs from "fs";
-import __dirname from "./utils.js";
+import __dirname from "../utils.js";
 
 class ProductManager {
-  #path = __dirname +"/src/api/products.json";
+  #path = __dirname +"./products.json";
   #nextId = 0;
   #products = [];
 
