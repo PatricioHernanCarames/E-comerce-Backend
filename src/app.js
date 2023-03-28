@@ -1,15 +1,17 @@
 import express from "express";
-import producstRouter from "./routes/products.router.js";
+import productsRouter from "./routes/products.router.js";
 import cartRouter  from "./routes/cart.router.js"
 import {engine} from "express-handlebars";
 import __dirname from "./utils.js";
 import {Server} from "socket.io"
+import mongoose from "mongoose";
 
 
 const app = express();
 
-app.use("/", producstRouter);
-app.use("/", cartRouter)
+app.use(express.json());
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartRouter)
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
@@ -54,4 +56,11 @@ const httpServer = app.listen(8080, () => {
     //   socket.emit("message", "Información actualizada");
     // }, 1000);
   });
+
+  mongoose
+  .connect("mongodb+srv://PatricioHCarames:Back1234@backende-commerce.8rpdxkg.mongodb.net/?retryWrites=true&w=majority")
+  .then((conn)=>{
+    console.log("Connected to MongoDB");
+  });
+
   

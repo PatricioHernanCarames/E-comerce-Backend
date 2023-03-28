@@ -1,4 +1,5 @@
-import ProductManager from "../api/ProductManager";
+import mongoose from "mongoose";
+import ProductManager from "../api/ProductManager.js";
 const socket = io();
 
 socket.emit("message", "Mensaje desde frontend!");
@@ -30,3 +31,7 @@ newProduct.addEventListener("click", () => {
   ProductManager.addProduct(productData);
   ProductManager.saveProducts();
 });
+
+
+
+

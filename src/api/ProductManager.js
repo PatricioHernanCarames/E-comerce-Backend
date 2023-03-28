@@ -2,7 +2,7 @@ import fs from "fs";
 import __dirname from "../utils.js";
 
 class ProductManager {
-  #path = __dirname +"./products.json";
+  #path = __dirname +"/products.json";
   #nextId = 0;
   #products = [];
 

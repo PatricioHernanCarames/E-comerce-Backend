@@ -1,26 +1,64 @@
+import __dirname from "../utils.js";
 import { Router, json } from "express";
 import ProductManager from "../api/ProductManager.js";
+import productsModel from "../models/products.model.js";
 
-
-let manager = new ProductManager("./src/api/products.json");
-
-
+let manager = new ProductManager(__dirname + "/api/products.json");
 
 const productsRouter = Router();
 
-productsRouter.use(json()); 
+productsRouter.use(json());
 
+productsRouter.get("/:prod", async (req, res) => {
+    try {
+        const products = await productsModel.Find();
 
+  res.render({ status: "ok", payload: products });
+        
+    } catch (error) {
+      res.status(500).send({status:"error", payload:error})  
+    }
+  
+});
 
-productsRouter.get('/:prod', async (req, res) => {
+productsRouter.post("/", async (req, res) => {
+  const { item, description, price, image, stock, code } = req.body;
 
-    const products =await manager.getProducts();
+  try {
+    const createdProduct = await productsModel.create({
+      item,
+      description,
+      price,
+      image,
+      stock,
+      code,
+    });
 
-    
+    res.status(201).send({ status: "ok", payload: createdProduct });
+  } catch (e) {
+    res.status(500).send({ status: "error", payload: e.message });
+  }
+});
 
-    res.render("realTimeProducts", {products});
+productsRouter.put("/:prodId", async (req, res) => {
+    const {prodId} = req.params;
 
-    
+    const pdatedProdData = req.body;
+
+    const updatedProd = await userModel.findOneAndUpdate({_id: prodId},
+        pdatedProdData,
+        {new: true});
+
+  res.status(200).send({status:"ok", payload:updatedProd})
+});
+
+productsRouter.delete("/:userId", async (req, res) => {
+    const {userId} = req.params;
+
+    const result = await userModel.deleteOne({_id:userId});
+
+    res.status(200).send({status:"ok", payload: result})
+
 
 });
 

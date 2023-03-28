@@ -5,7 +5,7 @@ const router = express.Router();
 const cartManager = new CartManager("./carrito.json");
 
 
-router.post("/", async (req, res) => {
+router.post("/:nc", async (req, res) => {
     
   try {
     const newCart = {
@@ -14,6 +14,7 @@ router.post("/", async (req, res) => {
     };
     cartManager.addCart(newCart);
     res.status(201).json(newCart);
+    res.send(newCart);
 
   } catch (error) {
     console.error(error);
@@ -43,7 +44,7 @@ router.get("/:cid",async(req, res)=>{
   if(cart){
     res.status(200).json(cart);
   }else{
-    res.satatus(400).send("el carrito no existe")
+    res.status(400).send("el carrito no existe")
   }
 });
 
@@ -54,16 +55,19 @@ router.post("/:cid/products/:pid", async(req,res)=>{
   const product = await cartManager.getProductById(pid);
 
   if(!product){
-    return res.stattus(404).send("el producto no existe");
+    return res.status(404).send("el producto no existe");
   }
   
   const result = await cartManager.addProductToCart(cid, pid, quantity);
 
   if (result){
-    res.json(result)
+    res.json(result);
+    res.send(result);
   }else{
-    res.status(404).send("El carrito no existe");
+    res.status(404).send(`El carrito ${cid} no existe`);
   }
+
+  
 
 })
 
