@@ -9,16 +9,16 @@ const productsRouter = Router();
 
 productsRouter.use(json());
 
-productsRouter.get("/:prod", async (req, res) => {
-    try {
-        const products = await productsModel.Find();
+productsRouter.get("/", async (req, res) => {
+  try {
+    const products = await productsModel.find();
 
-  res.render({ status: "ok", payload: products });
-        
-    } catch (error) {
-      res.status(500).send({status:"error", payload:error})  
-    }
-  
+    res.send(products);
+
+    /*res.render({ status: "ok", payload: products });*/
+  } catch (error) {
+    res.status(500).send({ status: "error", payload: error });
+  }
 });
 
 productsRouter.post("/", async (req, res) => {
@@ -41,25 +41,25 @@ productsRouter.post("/", async (req, res) => {
 });
 
 productsRouter.put("/:prodId", async (req, res) => {
-    const {prodId} = req.params;
+  const { prodId } = req.params;
 
-    const pdatedProdData = req.body;
+  const pdatedProdData = req.body;
 
-    const updatedProd = await userModel.findOneAndUpdate({_id: prodId},
-        pdatedProdData,
-        {new: true});
+  const updatedProd = await userModel.findOneAndUpdate(
+    { _id: prodId },
+    pdatedProdData,
+    { new: true }
+  );
 
-  res.status(200).send({status:"ok", payload:updatedProd})
+  res.status(200).send({ status: "ok", payload: updatedProd });
 });
 
 productsRouter.delete("/:userId", async (req, res) => {
-    const {userId} = req.params;
+  const { userId } = req.params;
 
-    const result = await userModel.deleteOne({_id:userId});
+  const result = await userModel.deleteOne({ _id: userId });
 
-    res.status(200).send({status:"ok", payload: result})
-
-
+  res.status(200).send({ status: "ok", payload: result });
 });
 
 export default productsRouter;
