@@ -66,6 +66,7 @@
     "socket.io-adapter": "^2.5.2",
     "socket.io-parser": "^4.2.2",
     "statuses": "^2.0.1",
+    "sweetalert2": "^11.7.3",
     "toidentifier": "^1.0.1",
     "type-is": "^1.6.18",
     "unpipe": "^1.0.0",
