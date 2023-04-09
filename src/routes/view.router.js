@@ -10,7 +10,7 @@ router.get("/chat",(req,res)=>{
   res.render("chat");
 })
 
-router.get("/rtp",(req,res)=>{
+router.get("/load",(req,res)=>{
   res.render("realTimeProducts");
 })
 
