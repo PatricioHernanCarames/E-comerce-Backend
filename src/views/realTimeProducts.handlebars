@@ -1,12 +1,30 @@
-<div >
-    <ul>
-        {{#each products}}
-        <li >Item: {{this.item}}, Precio:  {{this.price}}, Stock: {{this.stock}}</li>
-        <br>
-        {{/each}}
-        
-    </ul>
 
+
+<div>
+  <form id="myForm" action="/task/add" method="POST">
+    <label for="item">Name</label>
+    <input type="text" name="item" placeholder="Item" id="item">
+    <br>
+    <label for="description">Description</label>
+    <input type="text" name="description" placeholder="Description" id="description">
+    <br>
+    <label for="price">Price</label>
+    <input type="number" name="price" placeholder="Price" id="price">
+    <br>    
+    <label for="image">Image</label>
+    <input type="text" name="image" id="image" placeholder="Image Path">
+    <br>
+    <label for="stock">Stock</label>
+    <input type="number" name="stock" id="stock" placeholder="Stock">
+    <br>
+    <label for="code">Code</label>
+    <input type="number" name="code" id="code" placeholder="Code">
+    <br>
+    <button type="submit" id="submitButton">Submit</button>
+  </form>
 </div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/src/public/index.js"></script>
+
+
+
+
+

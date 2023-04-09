@@ -43,7 +43,7 @@ socket.on("messages", (data) => {
 
   messagesPannel.innerHTML = messages;
 });
-/*socket.emit("message", "Mensaje desde frontend!");
+socket.emit("message", "Mensaje desde frontend!");
 
 socket.on("message", (data) => {
   console.log(data);
@@ -52,7 +52,7 @@ socket.on("message", (data) => {
 socket.on("input-changed", (data) => {
   const receivedTextInput = document.getElementById("received-text-input");
   receivedTextInput.innerHTML = data;
-});*/
+});
 
 
 socket.on("new-user", (username) => {

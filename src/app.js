@@ -5,21 +5,27 @@ import cartRouter  from "./routes/cart.router.js"
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import {Server} from "socket.io"
-import mongoose from "mongoose";
+import "./database.js"
+import morgan from "morgan"
 
 
 const app = express();
 const messages=[];
 
 app.use(express.json());
-app.use("/api/products", productsRouter);
+app.use( productsRouter);
 app.use("/api/carts", cartRouter)
 
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
 app.set("views",__dirname + "/views")
 
+
+//middlewares
 app.use(express.static(__dirname + "/../public"));
+app.use(express.urlencoded({extended:false}));
+app.use(morgan('dev'))
+
 
 app.use("/", viewsRouter);
 
@@ -61,10 +67,6 @@ const httpServer = app.listen(8080, () => {
     
   });
 
-  mongoose
-  .connect("mongodb+srv://PatricioHCarames:Back1234@backende-commerce.8rpdxkg.mongodb.net/?retryWrites=true&w=majority")
-  .then((conn)=>{
-    console.log("Connected to MongoDB");
-  });
+  
 
   

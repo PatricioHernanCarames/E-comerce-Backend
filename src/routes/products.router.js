@@ -1,7 +1,8 @@
 import __dirname from "../utils.js";
 import { Router, json } from "express";
 import ProductManager from "../api/ProductManager.js";
-import productsModel from "../models/products.model.js";
+import Products from "../models/products.model.js";
+import router from "./view.router.js";
 
 let manager = new ProductManager(__dirname + "/api/products.json");
 
@@ -21,24 +22,36 @@ productsRouter.get("/", async (req, res) => {
   }
 });
 
-productsRouter.post("/", async (req, res) => {
-  const { item, description, price, image, stock, code } = req.body;
 
+productsRouter.post("/task/add", async (req, res) => {
   try {
-    const createdProduct = await productsModel.create({
-      item,
-      description,
-      price,
-      image,
-      stock,
-      code,
-    });
-
-    res.status(201).send({ status: "ok", payload: createdProduct });
-  } catch (e) {
-    res.status(500).send({ status: "error", payload: e.message });
+    const newProduct = new Products(req.body);
+    console.log(newProduct)
+    /*const savedProduct = await newProduct.save();
+    res.status(200).send({
+      status: "ok",
+      payload: savedProduct,
+      message: "Product was successfully added",
+    });*/
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ status: "error", payload: error });
   }
 });
+
+
+/*productsRouter.post("/task/add", async (req, res) => {
+  //const { item, description, price, image, stock, code } = req.body;
+  console.log(req.body)
+
+  try {
+    const products = Products(req.body);
+    console.log(products);
+    
+  } catch (e) {
+    console.log(e);
+  }
+});*/
 
 productsRouter.put("/:prodId", async (req, res) => {
   const { prodId } = req.params;

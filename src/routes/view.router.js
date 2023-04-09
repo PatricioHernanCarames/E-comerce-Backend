@@ -10,8 +10,8 @@ router.get("/chat",(req,res)=>{
   res.render("chat");
 })
 
-router.get("/index",(req,res)=>{
-  res.render("index");
+router.get("/rtp",(req,res)=>{
+  res.render("realTimeProducts");
 })
 
 export default router;
