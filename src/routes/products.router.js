@@ -21,13 +21,15 @@ productsRouter.get("/", async (req, res) => {
   }
 });
 
-productsRouter.post("/task/add", (req, res) => {
+
+
+productsRouter.post("/task/add",async (req, res) => {
   try {
     const task = productsModel(req.body);
     console.log(task);
 
-    res.status(200).send(task);
-    
+    res.status(201).send(task);
+    await task.save();
   } catch (e) {
     res.status(500).send({ status: "error", payload: e.message });
   }
