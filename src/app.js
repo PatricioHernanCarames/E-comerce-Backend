@@ -1,4 +1,4 @@
-import express from "express";
+import express, {json} from "express";
 import viewsRouter from "./routes/view.router.js"
 import productsRouter from "./routes/products.router.js";
 import cartRouter  from "./routes/cart.router.js"
@@ -14,7 +14,7 @@ const app = express();
 const messages=[];
 
 app.use(express.json());
-app.use( productsRouter);
+app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter)
 
 app.engine("handlebars", handlebars.engine());
@@ -24,10 +24,11 @@ app.set("views",__dirname + "/views")
 
 //middlewares
 app.use(express.static(__dirname + "/../public"));
-app.use(express.urlencoded({extended:false}));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+//app.use(express.urlencoded({extended:false}));
+//app.use(bodyParser.urlencoded({ extended: false }));
+app.use(json());
 app.use(morgan('dev'))
+
 
 
 app.use("/", viewsRouter);

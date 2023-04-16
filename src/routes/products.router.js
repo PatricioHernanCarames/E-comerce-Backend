@@ -2,6 +2,7 @@ import __dirname from "../utils.js";
 import { Router, json } from "express";
 import ProductManager from "../api/ProductManager.js";
 import productsModel from "../models/products.model.js";
+import { uploader } from "../file.loads.js";
 
 let manager = new ProductManager(__dirname + "/api/products.json");
 
@@ -12,6 +13,9 @@ productsRouter.use(json());
 productsRouter.get("/", async (req, res) => {
   try {
     const products = await productsModel.find();
+    const {limit, page, sort, title, stock, category} = req.params;
+
+    if(limit>0)
 
     res.send(products);
 
@@ -21,15 +25,20 @@ productsRouter.get("/", async (req, res) => {
   }
 });
 
+productsRouter.post("/", uploader.single("thumbnail"), async (req, res) => {
+  const { title, description, price, stock, code, status, category } = req.body;
 
+  
 
-productsRouter.post("/task/add",async (req, res) => {
+  let thumbnail=(req.file.path);
+  req.body.thumbnail = thumbnail;
   try {
     const task = productsModel(req.body);
     console.log(task);
 
-    res.status(201).send(task);
     await task.save();
+
+    res.status(201).send(task);
   } catch (e) {
     res.status(500).send({ status: "error", payload: e.message });
   }
